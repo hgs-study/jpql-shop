@@ -23,8 +23,8 @@ public class JPAMain {
             em.flush();
             em.clear();
 
-            //엔티티 프로젝션는 다 영속성 컨텍스트에서 관리함
-            em.createQuery("select o.address from Order o ", Address.class) // 반환타입 Member
+            //스칼라 프로젝션은 sql짜듯이 내가 가지고 싶어오고 싶은 것 가져옴
+            em.createQuery("select distinct m.username,m.age from Member m ") // 반환타입 Member
                     .getResultList();
 
 
