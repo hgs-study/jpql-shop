@@ -1,5 +1,6 @@
 import jpql.Address;
 import jpql.Member;
+import jpql.MemberDTO;
 import jpql.Team;
 
 import javax.persistence.*;
@@ -23,10 +24,14 @@ public class JPAMain {
             em.flush();
             em.clear();
 
-            //스칼라 프로젝션은 sql짜듯이 내가 가지고 싶어오고 싶은 것 가져옴
-            em.createQuery("select distinct m.username,m.age from Member m ") // 반환타입 Member
+            //DTO로 뽑아낼 때는 new jpql.MemberDTO(m.username,m.age)로 작성
+            //나중에 쿼리DSL 사용하면 이 부분도 극복이 됨
+            List<MemberDTO> resultList = em.createQuery("select new jpql.MemberDTO(m.username,m.age) from Member m ", MemberDTO.class) // 반환타입 Member
                     .getResultList();
 
+            MemberDTO memberDTO = resultList.get(0);
+            System.out.println(memberDTO.getUsername());
+            System.out.println(memberDTO.getAge());
 
             tx.commit();
         }catch (Exception e){
