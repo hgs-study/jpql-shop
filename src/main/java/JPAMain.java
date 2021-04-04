@@ -18,16 +18,15 @@ public class JPAMain {
             member.setAge(10);
             em.persist(member);
 
-            //메서드 체이닝
-            Member singleResult = em.createQuery("select m from Member m where m.username=:username", Member.class) // 반환타입 Member
-                    .setParameter("username", "현건수")
-                    .getSingleResult();
-            System.out.println(singleResult.getUsername());
+            em.flush();
+            em.clear();
 
+            //엔티티 프로젝션는 다 영속성 컨텍스트에서 관리함
+            List<Member> result = em.createQuery("select m from Member m ", Member.class) // 반환타입 Member
+                    .getResultList();
 
-
-
-            System.out.println(singleResult);
+            Member member1 = result.get(0);
+            member1.setAge(20);
 
             tx.commit();
         }catch (Exception e){
