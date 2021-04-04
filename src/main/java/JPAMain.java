@@ -1,3 +1,4 @@
+import jpql.Address;
 import jpql.Member;
 import jpql.Team;
 
@@ -23,7 +24,7 @@ public class JPAMain {
             em.clear();
 
             //엔티티 프로젝션는 다 영속성 컨텍스트에서 관리함
-            List<Team> result = em.createQuery("select t from Member m join m.team t", Team.class) // 반환타입 Member
+            em.createQuery("select o.address from Order o ", Address.class) // 반환타입 Member
                     .getResultList();
 
 
