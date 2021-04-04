@@ -1,4 +1,5 @@
 import jpql.Member;
+import jpql.Team;
 
 import javax.persistence.*;
 import java.util.List;
@@ -22,11 +23,9 @@ public class JPAMain {
             em.clear();
 
             //엔티티 프로젝션는 다 영속성 컨텍스트에서 관리함
-            List<Member> result = em.createQuery("select m from Member m ", Member.class) // 반환타입 Member
+            List<Team> result = em.createQuery("select m.team from Member m ", Team.class) // 반환타입 Member
                     .getResultList();
 
-            Member member1 = result.get(0);
-            member1.setAge(20);
 
             tx.commit();
         }catch (Exception e){
