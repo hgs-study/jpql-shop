@@ -40,6 +40,9 @@ public class JPAMain {
                 System.out.println("objects[2] = " + objects[2]);
             }
 
+            //타입 표현
+            em.createQuery("select m from Member m where type(m) = Member ",Member.class);
+
 
 
 
