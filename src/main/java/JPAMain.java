@@ -20,7 +20,7 @@ public class JPAMain {
 
 
             Member member = new Member();
-            member.setUsername("현건수");
+            member.setUsername(null); //coalesce
             member.setAge(10);
             member.setTeam(team);
             member.setType(MemberType.ADMIN);
@@ -29,12 +29,7 @@ public class JPAMain {
             em.flush();
             em.clear();
 
-            String query = "select " +
-                                "case when m.age<=10 then '학생 요금'" +
-                                "     when m.age>=60 then '경로 요금'" +
-                                "     else '일반 요금'" +
-                                "end" +
-                            " from Member m";
+            String query = "select coalesce(m.username,'이름 없는 회원') from Member m";
             List<String> query1 = em.createQuery(query, String.class).getResultList();
 
             query1.forEach(System.out::println);
