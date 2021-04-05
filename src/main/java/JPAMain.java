@@ -1,7 +1,4 @@
-import jpql.Address;
-import jpql.Member;
-import jpql.MemberDTO;
-import jpql.Team;
+import jpql.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -26,18 +23,23 @@ public class JPAMain {
             member.setUsername("현건수");
             member.setAge(10);
             member.setTeam(team);
+            member.setType(MemberType.ADMIN);
 
             em.persist(member);
             em.flush();
             em.clear();
 
-            String query  = "select (select avg(m1.age) from Member m1) from Member m ";
-            List<Double> resultList = em.createQuery(query, Double.class)
+            String query  = "select m.username,'Hello',TRUE from Member m where m.type = jpql.MemberType.ADMIN";
+            List<Object[]> resultList = em.createQuery(query)
                     .getResultList();
 
-            resultList.forEach(System.out::println);
+            for (Object[] objects : resultList) {
+                System.out.println("objects[0] = " + objects[0]);
+                System.out.println("objects[1] = " + objects[1]);
+                System.out.println("objects[2] = " + objects[2]);
+            }
 
-            System.out.println("resultList.size() = " + resultList.size());
+
 
 
 
