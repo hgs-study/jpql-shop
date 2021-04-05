@@ -31,7 +31,7 @@ public class JPAMain {
             em.flush();
             em.clear();
 
-            String query  = "select m from Member m,Team t where m.username=t.name";
+            String query  = "select m from Member m left join m.team t on t.name='teamA'";
             List<Member> resultList = em.createQuery(query, Member.class)
                     .getResultList();
 
