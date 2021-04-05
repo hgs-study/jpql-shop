@@ -14,22 +14,22 @@ public class JPAMain {
         tx.begin();
         try{
 
-            Team team = new Team();
-            team.setName("teamA");
-            em.persist(team);
 
 
             Member member = new Member();
             member.setUsername("관리자"); //nullif
             member.setAge(10);
-            member.setTeam(team);
-            member.setType(MemberType.ADMIN);
-
             em.persist(member);
+
+            Member member2 = new Member();
+            member2.setUsername("관리자2"); //nullif
+            member2.setAge(20);
+            em.persist(member2);
+
             em.flush();
             em.clear();
 
-            String query = "select nullif(m.username,'관리자') from Member m";
+            String query = "select function('group_concat',m.username) from Member m";
             List<String> query1 = em.createQuery(query, String.class).getResultList();
 
             query1.forEach(System.out::println);
