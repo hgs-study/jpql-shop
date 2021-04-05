@@ -29,23 +29,15 @@ public class JPAMain {
             em.flush();
             em.clear();
 
-            String query  = "select m.username,'Hello',TRUE from Member m where m.type = :userType";
-            List<Object[]> resultList = em.createQuery(query)
-                    .setParameter("userType", MemberType.ADMIN)
-                    .getResultList();
+            String query = "select " +
+                                "case when m.age<=10 then '학생 요금'" +
+                                "     when m.age>=60 then '경로 요금'" +
+                                "     else '일반 요금'" +
+                                "end" +
+                            " from Member m";
+            List<String> query1 = em.createQuery(query, String.class).getResultList();
 
-            for (Object[] objects : resultList) {
-                System.out.println("objects[0] = " + objects[0]);
-                System.out.println("objects[1] = " + objects[1]);
-                System.out.println("objects[2] = " + objects[2]);
-            }
-
-            //타입 표현
-            em.createQuery("select m from Member m where type(m) = Member ",Member.class);
-
-
-
-
+            query1.forEach(System.out::println);
 
             tx.commit();
         }catch (Exception e){
