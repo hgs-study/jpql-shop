@@ -16,22 +16,26 @@ public class JPAMain {
 
         tx.begin();
         try{
-            Member member = new Member();
-            member.setUsername("현건수");
-            member.setAge(10);
-            em.persist(member);
+            for(int i = 0; i<100 ; i++){
+                Member member = new Member();
+                member.setUsername("member "+i);
+                member.setAge(i);
+                em.persist(member);
+            }
 
             em.flush();
             em.clear();
 
-            //DTO로 뽑아낼 때는 new jpql.MemberDTO(m.username,m.age)로 작성
-            //나중에 쿼리DSL 사용하면 이 부분도 극복이 됨
-            List<MemberDTO> resultList = em.createQuery("select new jpql.MemberDTO(m.username,m.age) from Member m ", MemberDTO.class) // 반환타입 Member
+            List<Member> resultList = em.createQuery("select m from Member m order by m.age desc ", Member.class)
+                    .setFirstResult(1) //인덱스
+                    .setMaxResults(10) // 몇개 가져올거야?!
                     .getResultList();
 
-            MemberDTO memberDTO = resultList.get(0);
-            System.out.println(memberDTO.getUsername());
-            System.out.println(memberDTO.getAge());
+            resultList.forEach(System.out::println);
+
+            System.out.println("resultList.size() = " + resultList.size());
+
+
 
             tx.commit();
         }catch (Exception e){
