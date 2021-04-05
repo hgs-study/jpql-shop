@@ -12,7 +12,7 @@ public class Member {
     private int age;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TEAM_ID").
+    @JoinColumn(name = "TEAM_ID")
     private Team team;
 
     @Enumerated(EnumType.STRING) //enum은 기본이 숫자라 string으로 바꾸는 것 필수

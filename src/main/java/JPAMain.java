@@ -29,8 +29,9 @@ public class JPAMain {
             em.flush();
             em.clear();
 
-            String query  = "select m.username,'Hello',TRUE from Member m where m.type = jpql.MemberType.ADMIN";
+            String query  = "select m.username,'Hello',TRUE from Member m where m.type = :userType";
             List<Object[]> resultList = em.createQuery(query)
+                    .setParameter("userType", MemberType.ADMIN)
                     .getResultList();
 
             for (Object[] objects : resultList) {
