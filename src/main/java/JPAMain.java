@@ -37,8 +37,14 @@ public class JPAMain {
             //m.team.name
             String query2 = "select m.team.name from Member m";
 
+            //컬렉션 값 연관 경로 (묵시적 내부 조인 inner join)발생
+            //t.members (members가 하나일지 여러개일지 모름)
+            String query3 = "select t.members from Team t";
+
+
             List<String> queryList = em.createQuery(query, String.class).getResultList();
             List<String> query2List = em.createQuery(query2, String.class).getResultList();
+            List<String> query3List = em.createQuery(query3, String.class).getResultList();
 
             queryList.forEach(System.out::println);
 
