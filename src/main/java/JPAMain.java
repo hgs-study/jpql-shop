@@ -29,10 +29,18 @@ public class JPAMain {
             em.flush();
             em.clear();
 
-            String query = "select function('group_concat',m.username) from Member m";
-            List<String> query1 = em.createQuery(query, String.class).getResultList();
+            //상태 필드
+            //m.username
+            String query = "select m.username from Member m";
 
-            query1.forEach(System.out::println);
+            //단일 연관 경로 (묵시적 내부 조인 inner join)발생
+            //m.team.name
+            String query2 = "select m.team.name from Member m";
+
+            List<String> queryList = em.createQuery(query, String.class).getResultList();
+            List<String> query2List = em.createQuery(query2, String.class).getResultList();
+
+            queryList.forEach(System.out::println);
 
             tx.commit();
         }catch (Exception e){
