@@ -41,10 +41,15 @@ public class JPAMain {
             //t.members (members가 하나일지 여러개일지 모름)
             String query3 = "select t.members from Team t";
 
+            //컬렉션 값 연관 경로 해결
+            //명시적 조인으로 Team에 Member를 조인하고 m.username으로 가져옴
+            String query4 = "select m.username from Team t join t.members m";
+
 
             List<String> queryList = em.createQuery(query, String.class).getResultList();
             List<String> query2List = em.createQuery(query2, String.class).getResultList();
             List<String> query3List = em.createQuery(query3, String.class).getResultList();
+            List<String> query4List = em.createQuery(query4, String.class).getResultList();
 
             queryList.forEach(System.out::println);
 
