@@ -13,47 +13,48 @@ public class JPAMain {
 
         tx.begin();
         try{
+            Team teamA = new Team();
+            teamA.setName("A");
+            em.persist(teamA);
 
-
+            Team teamB = new Team();
+            teamB.setName("B");
+            em.persist(teamB);
 
             Member member = new Member();
-            member.setUsername("관리자"); //nullif
-            member.setAge(10);
+            member.setUsername("회원1"); //nullif
+            member.setTeam( teamA);
             em.persist(member);
 
             Member member2 = new Member();
-            member2.setUsername("관리자2"); //nullif
-            member2.setAge(20);
+            member2.setUsername("회원2"); //nullif
+            member2.setTeam(teamA);
             em.persist(member2);
+            
+            Member member3 = new Member();
+            member3.setUsername("회원2"); //nullif
+            member3.setTeam(teamB);
+            em.persist(member3);
 
             em.flush();
             em.clear();
 
-            //상태 필드
-            //m.username
-            String query = "select m.username from Member m";
 
-            //단일 연관 경로 (묵시적 내부 조인 inner join)발생
-            //m.team.name
-            String query2 = "select m.team.name from Member m";
+            String query = "select m from Member m";
 
-            //컬렉션 값 연관 경로 (묵시적 내부 조인 inner join)발생
-            //t.members (members가 하나일지 여러개일지 모름)
-            String query3 = "select t.members from Team t";
+            List<Member> queryList = em.createQuery(query, Member.class).getResultList();
 
-            //컬렉션 값 연관 경로 해결
-            //명시적 조인으로 Team에 Member를 조인하고 m.username으로 가져옴
-            String query4 = "select m.username from Team t join t.members m";
+            for (Member member1 : queryList) {
+                System.out.println("member = " + member1.getUsername() +","+member1.getTeam().getName());
+                // 회원1, 팀A (SQL)
+                // 회원2, 팀A (1차캐시)
+                // 회원3, 팀B (SQL)
 
+                // 회원100명이 다 다를경우 => N + 1 쿼리가 나감 (결과 TEAM N개, MEMBER 1개)
+                // 즉시 로딩하든 지연로딩하든 발생함 (해결 -> 페치조인)
+            }
 
-            List<String> queryList = em.createQuery(query, String.class).getResultList();
-            List<String> query2List = em.createQuery(query2, String.class).getResultList();
-            List<String> query3List = em.createQuery(query3, String.class).getResultList();
-            List<String> query4List = em.createQuery(query4, String.class).getResultList();
-
-            queryList.forEach(System.out::println);
-
-            tx.commit();
+           tx.commit();
         }catch (Exception e){
             tx.rollback();
             e.printStackTrace();
