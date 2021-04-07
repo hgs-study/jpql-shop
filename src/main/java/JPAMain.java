@@ -40,18 +40,14 @@ public class JPAMain {
             em.clear();
 
 
-            String query = "select m from Member m";
+            String query = "select m from Member m join fetch m.team";
 
             List<Member> queryList = em.createQuery(query, Member.class).getResultList();
 
             for (Member member1 : queryList) {
                 System.out.println("member = " + member1.getUsername() +","+member1.getTeam().getName());
-                // 회원1, 팀A (SQL)
-                // 회원2, 팀A (1차캐시)
-                // 회원3, 팀B (SQL)
-
-                // 회원100명이 다 다를경우 => N + 1 쿼리가 나감 (결과 TEAM N개, MEMBER 1개)
-                // 즉시 로딩하든 지연로딩하든 발생함 (해결 -> 페치조인)
+                //member1.getTeam()의  team은 프록시 객체가 아니라 진짜 객체임
+                //이유 : join fetch로 인해 쿼리문 하나로 한 번에 다 가져오기 때문에
             }
 
            tx.commit();
