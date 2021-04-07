@@ -42,7 +42,12 @@ public class JPAMain {
 
             String query = "select DISTINCT t from Team t join fetch t.members";
 
-            List<Team> queryList = em.createQuery(query, Team.class).getResultList();
+            //DB엔 여러 ROW가 있는데 PAGE 1개만 가져와 하면 JPA는 그대로 1개만 가져온다.
+            //그 1개에 객체 그래프를 다 가져오는 속성때문에 여러 객체(ROW)를 다 가져온다.
+            List<Team> queryList = em.createQuery(query, Team.class)
+                    .setFirstResult(0)
+                    .setMaxResults(1)
+                    .getResultList();
 
             System.out.println("queryList.size() = " + queryList.size());
 
