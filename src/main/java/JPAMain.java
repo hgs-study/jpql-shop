@@ -40,9 +40,11 @@ public class JPAMain {
             em.clear();
 
 
-            String query = "select t from Team t join fetch t.members";
+            String query = "select DISTINCT t from Team t join fetch t.members";
 
             List<Team> queryList = em.createQuery(query, Team.class).getResultList();
+
+            System.out.println("queryList.size() = " + queryList.size());
 
             //컬렉션 페치조인 일대다에선 데이터 증폭돼서 나옴
             //이유 : teamA에 2명의 회원이 있으면 똑같은 데이터가 2개나옴 (회원이 2명이기 때문에 2줄이 나오는 것)
