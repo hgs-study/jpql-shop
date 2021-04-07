@@ -40,14 +40,17 @@ public class JPAMain {
             em.clear();
 
 
-            String query = "select m from Member m join fetch m.team";
+            String query = "select t from Team t join fetch t.members";
 
-            List<Member> queryList = em.createQuery(query, Member.class).getResultList();
+            List<Team> queryList = em.createQuery(query, Team.class).getResultList();
 
-            for (Member member1 : queryList) {
-                System.out.println("member = " + member1.getUsername() +","+member1.getTeam().getName());
-                //member1.getTeam()의  team은 프록시 객체가 아니라 진짜 객체임
-                //이유 : join fetch로 인해 쿼리문 하나로 한 번에 다 가져오기 때문에
+            //컬렉션 페치조인 일대다에선 데이터 증폭돼서 나옴
+            //이유 : teamA에 2명의 회원이 있으면 똑같은 데이터가 2개나옴 (회원이 2명이기 때문에 2줄이 나오는 것)
+            for (Team team : queryList) {
+                System.out.println("team.getName() = " + team.getName() +", members = "+team.getMembers().size());
+                for (Member teamMember : team.getMembers()) {
+                    System.out.println("-> teamMember = " + teamMember);
+                }
             }
 
            tx.commit();
