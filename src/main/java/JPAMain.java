@@ -36,13 +36,15 @@ public class JPAMain {
             member3.setTeam(teamB);
             em.persist(member3);
 
-            em.flush();
-            em.clear();
-
+            //이전에 flush 없어도 이전 영속성 컨텍스트 자동 flush
+            //이유: 커밋을 하거나 쿼리를 날릴 때 강제 호출(flush)된다.
             int resultCount = em.createQuery("update Member m set m.age = 20")
                     .executeUpdate();
 
-            System.out.println("resultCount = " + resultCount);
+            //DB에는 전부 age가 20이지만 영속성 컨텍스트가 초기화 되지 않았기 때문에 0이 나온다.
+            System.out.println("member.getAge() = " + member.getAge());
+            System.out.println("member2.getAge() = " + member2.getAge());
+            System.out.println("member3.getAge() = " + member3.getAge());
 
             tx.commit();
         }catch (Exception e){
