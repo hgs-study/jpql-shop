@@ -41,10 +41,13 @@ public class JPAMain {
             int resultCount = em.createQuery("update Member m set m.age = 20")
                     .executeUpdate();
 
-            //DB에는 전부 age가 20이지만 영속성 컨텍스트가 초기화 되지 않았기 때문에 0이 나온다.
-            System.out.println("member.getAge() = " + member.getAge());
-            System.out.println("member2.getAge() = " + member2.getAge());
-            System.out.println("member3.getAge() = " + member3.getAge());
+            //영속성 컨텍스트 초기화
+            em.clear();
+
+            Member findMember1 = em.find(Member.class, member.getId());
+            //영속성 컨텍스트 초기화 후 다시 조회해서 20이 나온다.
+            System.out.println("findMember1 = " + findMember1.getAge());
+
 
             tx.commit();
         }catch (Exception e){
