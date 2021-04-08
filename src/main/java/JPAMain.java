@@ -40,10 +40,10 @@ public class JPAMain {
             em.clear();
 
             //엔티티를 직접 사용하면 엔티티의 기본키값을 사용한다 (ex) m-> m.id 사용
-            String query = "select m from Member m where m = :member";
+            String query = "select m from Member m where m.id = :memberId";
 
             Member member1 = em.createQuery(query, Member.class)
-                    .setParameter("member", member)
+                    .setParameter("memberId", member.getId())
                     .getSingleResult();
 
             System.out.println("member1 = " + member1);
