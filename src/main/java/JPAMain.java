@@ -39,13 +39,10 @@ public class JPAMain {
             em.flush();
             em.clear();
 
-            List<Member> resultList = em.createNamedQuery("Member.findByUsername", Member.class)
-                    .setParameter("username", "회원1")
-                    .getResultList();
+            int resultCount = em.createQuery("update Member m set m.age = 20")
+                    .executeUpdate();
 
-            for (Member member1 : resultList) {
-                System.out.println("member1 = " + member1);
-            }
+            System.out.println("resultCount = " + resultCount);
 
             tx.commit();
         }catch (Exception e){
