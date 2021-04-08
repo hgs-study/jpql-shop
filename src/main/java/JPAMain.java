@@ -39,14 +39,13 @@ public class JPAMain {
             em.flush();
             em.clear();
 
-            //외래키(team)를 엔티티로 직접 조회할 때도 기본 키 값 사용
-            String query = "select m from Member m where m.team = :team";
-
-            List<Member> team = em.createQuery(query, Member.class)
-                    .setParameter("team", teamA)
+            List<Member> resultList = em.createNamedQuery("Member.findByUsername", Member.class)
+                    .setParameter("username", "회원1")
                     .getResultList();
 
-            team.forEach(System.out::println);
+            for (Member member1 : resultList) {
+                System.out.println("member1 = " + member1);
+            }
 
             tx.commit();
         }catch (Exception e){
